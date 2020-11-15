@@ -73,7 +73,7 @@ Q16 = st.slider(
     'On a scale from 1 to 10, how easy is it to make the suggestions to the superiors on procedural changes in your organization? (Structure, TrF)', 1,10,5)
 
 @st.cache(suppress_st_warning=True)
-def visualize(s_point_x,s_point_y,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16):
+def visualize(s_point_x,s_point_y,Q2,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16):
 
     if Q1 == "Yes":
         X = [s_point_x,0,-Q6,0,Q8,Q9,-Q11,-Q13,Q15]
@@ -115,19 +115,58 @@ def visualize(s_point_x,s_point_y,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16):
     ax.set_xticks([0], minor=False)
     ax.xaxis.grid(True, which='major')
 
+    #Plot the polygon
+    if Q1 == "Yes":
+        if (Q3 =='UNCLEAR & UNSUPPORTIVE') & (Q4 == 'VERY UNLIKELY'):
+            polygon = Polygon(np.array(b), fill=False)
+        elif (Q3 =='CLEAR & SUPPORTIVE') & (Q4 == 'VERY LIKELY'):
+            polygon = Polygon(np.array(b), alpha = 0.4, fill=True)
+        else:
+            polygon = Polygon(np.array(b),fill=False, hatch='/')
+    else:
+        polygon = Polygon(np.array(b), alpha = 0.4, fill=True)
 
-    polygon = Polygon(np.array(b), True)
-    p = PatchCollection([polygon], cmap=matplotlib.cm.jet, alpha=0.4)
-    colors = 100*np.random.rand(1)
-    p.set_array(np.array(colors))
-
-    ax.add_collection(p)
+    ax.add_patch(polygon)
     ax.set_xlim([-10,10])
     ax.set_ylim([-10,10])
+
+    #plot the spiral
+    if  (Q1 == 'Yes') & (Q2 == "CONTINUOUSLY"):
+
+        n = 800
+        radius = max(np.abs([Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16]))
+
+        angle = np.linspace(0,5*2*np.pi, n)
+        radius = np.linspace(0,radius,n)
+
+        x = radius * np.cos(angle)
+        y = radius * np.sin(angle)
+
+        ax2 = ax.twinx()
+        ax2.scatter(x,y, c = angle)
+        ax2.set_xlim([-10,10])
+        ax2.set_ylim([-10,10])
+    
+
+    #Plot the circles
+    elif  (Q1 == 'Yes') & (Q2 == "INCREMENTALLY"):
+
+        ax3 = ax.twinx()
+
+        radius1 = max(np.abs([Q5,Q6,Q7,Q8]))
+        radius2 = max(np.abs([Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16]))
+        ax3.add_artist(plt.Circle((0, 0), radius1, fill=False, lw=2))
+        ax3.add_artist(plt.Circle((0, 0), radius2, fill=False, lw=2))
+        ax3.set_xlim([-10,10])
+        ax3.set_ylim([-10,10])
+
+
     plt.xlabel('TrA (Transaction)', fontsize=10)
     plt.ylabel('TrF (Transformation)', fontsize=10)
     img = plt.imread("BG.png")
     ax.imshow(img,extent=[-10,10,-10,10])
+
+    
 
     st.write(fig)
 
@@ -136,6 +175,7 @@ def visualize(s_point_x,s_point_y,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16):
 if st.button('Visualize'): 
 
     if Q1 == "Yes":
-        visualize(s_point_x,s_point_y,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16)
+        visualize(s_point_x,s_point_y,Q2,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16)
     elif Q1 == "No":
-        visualize(10,10,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16)
+        Q2=1
+        visualize(10,10,Q2,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16)
