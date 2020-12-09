@@ -179,3 +179,5 @@ if st.button('Visualize'):
     elif Q1 == "No":
         Q2=1
         visualize(10,10,Q2,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16)
+        
+    st.markdown('<a href="mailto:elena@purplesuncorp.com"><button type="button" style="display: block;cursor: pointer;outline: none;border: none;background-color: var(--light);width: 400px;height: 70px;border-radius: 12px;font-size: 1rem;font-weight: 600;color: var(--text);background-size: 100% 100%;box-shadow: 0 0 0 7px var(--light) inset;margin-bottom: 15px;">If you want a free 30-min consultation on your company visualization, please contact us here!</button></a>', unsafe_allow_html=True)
