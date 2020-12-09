@@ -8,7 +8,7 @@ from matplotlib.collections import PatchCollection
 import math
 from functools import reduce
 
-st.title('Elenas thing')
+st.title('OCS tool')
 
 Q1 = st.selectbox(
     'Does your organization have a vision statement, mission statement, and a list of values?',
